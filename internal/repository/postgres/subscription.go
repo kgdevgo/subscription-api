@@ -160,7 +160,6 @@ func (r *SubscriptionRepo) CalculateTotal(ctx context.Context, filter domain.Fil
 	if filter.ToDate != nil {
 		query += fmt.Sprintf(" AND start_date <= $%d", argID)
 		args = append(args, filter.ToDate.Time)
-		argID++
 	}
 
 	var total int64
