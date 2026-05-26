@@ -14,7 +14,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-playground/locales/ro"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -34,7 +33,7 @@ func main() {
 	slog.Info("starting subscription aggregation service", slog.String("env", cfg.Env))
 
 	// Initialize database connection
-	ctx, cancel := context.WithCancel(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	dbPool, err := pgxpool.New(ctx, cfg.PostgreSQL.DSN)
