@@ -55,8 +55,6 @@ func (uc *SubscriptionUseCase) GetByID(ctx context.Context, id uuid.UUID) (*doma
 }
 
 func (uc *SubscriptionUseCase) Update(ctx context.Context, sub *domain.Subscription) error {
-	const op = "usecase.subscription.Update"
-
 	if err := uc.validate.Struct(sub); err != nil {
 		return fmt.Errorf("%w: %s", ErrInvalidInput, err.Error())
 	}

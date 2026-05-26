@@ -13,17 +13,17 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var ErrNotFound = errors.New("not found")
+var ErrNotFound = errors.New("subscription not found")
 
-type SubscriptionRepository struct {
-	db *pgxpool.DB
+type SubscriptionRepo struct {
+	db *pgxpool.Pool
 }
 
-func NewSubscriptionRepository(db *pgxpool.DB) *SubscriptionRepository {
-	return &SubscriptionRepository{db: db}
+func NewSubscriptionRepo(db *pgxpool.Pool) *SubscriptionRepo {
+	return &SubscriptionRepo{db: db}
 }
 
-func (r *SubscriptionRepository) Create(ctx context.Context, sub *domain.Subscription) error {
+func (r *SubscriptionRepo) Create(ctx context.Context, sub *domain.Subscription) error {
 	const op = "repository.postgres.Create"
 
 	query := `
@@ -43,10 +43,11 @@ func (r *SubscriptionRepository) Create(ctx context.Context, sub *domain.Subscri
 		slog.Error("database error", slog.String("op", op), slog.String("err", err.Error()))
 		return fmt.Errorf("%s: %w", op, err)
 	}
+
 	return nil
 }
 
-func (r *SubscriptionRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Subscription, error) {
+func (r *SubscriptionRepo) GetByID(ctx context.Context, id uuid.UUID) (*domain.Subscription, error) {
 	const op = "repository.postgres.GetByID"
 
 	query := `
@@ -84,7 +85,7 @@ func (r *SubscriptionRepository) GetByID(ctx context.Context, id uuid.UUID) (*do
 	return &sub, nil
 }
 
-func (r *SubscriptionRepository) Update(ctx context.Context, sub *domain.Subscription) error {
+func (r *SubscriptionRepo) Update(ctx context.Context, sub *domain.Subscription) error {
 	const op = "repository.postgres.Update"
 
 	query := `
@@ -113,7 +114,7 @@ func (r *SubscriptionRepository) Update(ctx context.Context, sub *domain.Subscri
 	return nil
 }
 
-func (r *SubscriptionRepository) Delete(ctx context.Context, id uuid.UUID) error {
+func (r *SubscriptionRepo) Delete(ctx context.Context, id uuid.UUID) error {
 	const op = "repository.postgres.Delete"
 
 	query := `DELETE FROM subscriptions WHERE id = $1`
@@ -131,7 +132,7 @@ func (r *SubscriptionRepository) Delete(ctx context.Context, id uuid.UUID) error
 	return nil
 }
 
-func (r *SubscriptionRepository) CalculateTotal(ctx context.Context, filter domain.Filter) (int64, error) {
+func (r *SubscriptionRepo) CalculateTotal(ctx context.Context, filter domain.Filter) (int64, error) {
 	const op = "repository.postgres.CalculateTotal"
 
 	query := `SELECT COALESCE(SUM(price), 0) FROM subscriptions WHERE 1=1`
