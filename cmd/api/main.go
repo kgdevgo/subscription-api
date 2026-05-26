@@ -51,7 +51,7 @@ func main() {
 	slog.Info("successfully connected to database")
 
 	// Initialize dependencies
-	repo := postgres.NewSubscriptionRepository(dbPool)
+	repo := postgres.NewSubscriptionRepo(dbPool)
 	uCase := usecase.NewSubscriptionUseCase(repo)
 	router := deliveryHTTP.NewRouter(uCase)
 
