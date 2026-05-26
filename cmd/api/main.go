@@ -7,14 +7,14 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"subscription-api/config"
-	deliveryHTTP "subscription-api/internal/delivery/http"
-	"subscription-api/internal/repository/postgres"
-	"subscription-api/internal/usecase"
 	"syscall"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/kgdevgo/subscription-api/config"
+	deliveryHTTP "github.com/kgdevgo/subscription-api/internal/delivery/http"
+	"github.com/kgdevgo/subscription-api/internal/repository/postgres"
+	"github.com/kgdevgo/subscription-api/internal/usecase"
 )
 
 func main() {

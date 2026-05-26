@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
-	"subscription-api/internal/domain"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/kgdevgo/subscription-api/internal/domain"
 )
 
 var (

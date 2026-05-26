@@ -5,12 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
-	"subscription-api/internal/domain"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/kgdevgo/subscription-api/internal/domain"
 )
 
 var ErrNotFound = errors.New("subscription not found")

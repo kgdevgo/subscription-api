@@ -2,8 +2,9 @@ package http
 
 import (
 	"net/http"
-	v1 "subscription-api/internal/delivery/http/v1"
-	"subscription-api/internal/domain"
+
+	v1 "github.com/kgdevgo/subscription-api/internal/delivery/http/v1"
+	"github.com/kgdevgo/subscription-api/internal/domain"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
