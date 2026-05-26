@@ -24,3 +24,7 @@ linters:
     - unused
     - goimports
     - revive
+
+issues:
+  exclude-dirs:
+    - docs
