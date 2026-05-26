@@ -37,6 +37,17 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	_ = json.NewEncoder(w).Encode(payload)
 }
 
+// Create godoc
+// @Summary      Create a new subscription
+// @Description  Создает запись о подписке пользователя
+// @Tags         subscriptions
+// @Accept       json
+// @Produce      json
+// @Param        subscription body domain.Subscription true "Subscription Data"
+// @Success      201  {object}  domain.Subscription
+// @Failure      400  {object}  errorResponse
+// @Failure      500  {object}  errorResponse
+// @Router       /subscriptions [post]
 func (h *SubscriptionHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var sub domain.Subscription
 	if err := json.NewDecoder(r.Body).Decode(&sub); err != nil {
@@ -128,6 +139,19 @@ func (h *SubscriptionHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// CalculateTotal godoc
+// @Summary      Calculate total price
+// @Description  Подсчитывает суммарную стоимость подписок за выбранный период с фильтрацией
+// @Tags         subscriptions
+// @Produce      json
+// @Param        user_id       query     string  false  "ID пользователя (UUID)"
+// @Param        service_name  query     string  false  "Название сервиса"
+// @Param        from          query     string  false  "Дата начала периода (MM-YYYY)"
+// @Param        to            query     string  false  "Дата окончания периода (MM-YYYY)"
+// @Success      200  {object}  map[string]int64 "total_price"
+// @Failure      400  {object}  errorResponse
+// @Failure      500  {object}  errorResponse
+// @Router       /subscriptions/total [get]
 func (h *SubscriptionHandler) CalculateTotal(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	var filter domain.Filter

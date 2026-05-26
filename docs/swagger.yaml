@@ -1,0 +1,115 @@
+basePath: /api/v1
+definitions:
+  domain.CustomDate:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  domain.Subscription:
+    properties:
+      end_date:
+        $ref: '#/definitions/domain.CustomDate'
+      id:
+        type: string
+      price:
+        minimum: 0
+        type: integer
+      service_name:
+        maxLength: 255
+        minLength: 1
+        type: string
+      start_date:
+        $ref: '#/definitions/domain.CustomDate'
+      user_id:
+        type: string
+    required:
+    - price
+    - service_name
+    - start_date
+    - user_id
+    type: object
+  v1.errorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST-сервис для агрегации данных об онлайн подписках пользователей.
+  title: Subscription Aggregation API
+  version: "1.0"
+paths:
+  /subscriptions:
+    post:
+      consumes:
+      - application/json
+      description: Создает запись о подписке пользователя
+      parameters:
+      - description: Subscription Data
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Subscription'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Subscription'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Create a new subscription
+      tags:
+      - subscriptions
+  /subscriptions/total:
+    get:
+      description: Подсчитывает суммарную стоимость подписок за выбранный период с
+        фильтрацией
+      parameters:
+      - description: ID пользователя (UUID)
+        in: query
+        name: user_id
+        type: string
+      - description: Название сервиса
+        in: query
+        name: service_name
+        type: string
+      - description: Дата начала периода (MM-YYYY)
+        in: query
+        name: from
+        type: string
+      - description: Дата окончания периода (MM-YYYY)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: total_price
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errorResponse'
+      summary: Calculate total price
+      tags:
+      - subscriptions
+swagger: "2.0"

@@ -17,6 +17,11 @@ import (
 	"github.com/kgdevgo/subscription-api/internal/usecase"
 )
 
+// @title           Subscription Aggregation API
+// @version         1.0
+// @description     REST-сервис для агрегации данных об онлайн подписках пользователей.
+// @host            localhost:8080
+// @BasePath        /api/v1
 func main() {
 	// Initialize logger
 	var logHandler slog.Handler

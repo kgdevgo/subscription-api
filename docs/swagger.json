@@ -1,0 +1,171 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "REST-сервис для агрегации данных об онлайн подписках пользователей.",
+        "title": "Subscription Aggregation API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/subscriptions": {
+            "post": {
+                "description": "Создает запись о подписке пользователя",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Create a new subscription",
+                "parameters": [
+                    {
+                        "description": "Subscription Data",
+                        "name": "subscription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Subscription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Subscription"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions/total": {
+            "get": {
+                "description": "Подсчитывает суммарную стоимость подписок за выбранный период с фильтрацией",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscriptions"
+                ],
+                "summary": "Calculate total price",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID пользователя (UUID)",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Название сервиса",
+                        "name": "service_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Дата начала периода (MM-YYYY)",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Дата окончания периода (MM-YYYY)",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "total_price",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer",
+                                "format": "int64"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.CustomDate": {
+            "type": "object",
+            "properties": {
+                "time.Time": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Subscription": {
+            "type": "object",
+            "required": [
+                "price",
+                "service_name",
+                "start_date",
+                "user_id"
+            ],
+            "properties": {
+                "end_date": {
+                    "$ref": "#/definitions/domain.CustomDate"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "service_name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "start_date": {
+                    "$ref": "#/definitions/domain.CustomDate"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.errorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

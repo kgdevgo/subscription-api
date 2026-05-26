@@ -3,11 +3,13 @@ package http
 import (
 	"net/http"
 
-	v1 "github.com/kgdevgo/subscription-api/internal/delivery/http/v1"
-	"github.com/kgdevgo/subscription-api/internal/domain"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+
+	_ "github.com/kgdevgo/subscription-api/docs"
+	v1 "github.com/kgdevgo/subscription-api/internal/delivery/http/v1"
+	"github.com/kgdevgo/subscription-api/internal/domain"
 )
 
 func NewRouter(uc domain.SubscriptionUseCase) http.Handler {
@@ -17,6 +19,10 @@ func NewRouter(uc domain.SubscriptionUseCase) http.Handler {
 	r.Use(middleware.ClientIPFromHeader("X-Real-IP"))
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
+	))
 
 	handler := v1.NewSubscriptionHandler(uc)
 
