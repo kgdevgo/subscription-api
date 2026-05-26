@@ -12,6 +12,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/kgdevgo/subscription-api/config"
+	_ "github.com/kgdevgo/subscription-api/docs"
 	deliveryHTTP "github.com/kgdevgo/subscription-api/internal/delivery/http"
 	"github.com/kgdevgo/subscription-api/internal/repository/postgres"
 	"github.com/kgdevgo/subscription-api/internal/usecase"

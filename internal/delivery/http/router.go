@@ -7,7 +7,6 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 
-	_ "github.com/kgdevgo/subscription-api/docs"
 	v1 "github.com/kgdevgo/subscription-api/internal/delivery/http/v1"
 	"github.com/kgdevgo/subscription-api/internal/domain"
 )
